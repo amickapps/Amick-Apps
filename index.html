@@ -196,7 +196,7 @@ const DEVICE_ICONS = (() => {
 })();
 
 function renderDetail(a) {
-  let i = 0; const r = () => `class="reveal" style="--i:${i++}"`;
+  let i = 0; const r = () => `style="--i:${i++}"`;
   const sets = a.screenshots;
   const tabs = sets.length > 1
     ? `<div class="seg" role="tablist"><span class="seg-pill"></span>${sets.map((set, k) =>
@@ -212,26 +212,26 @@ function renderDetail(a) {
       </button>
       <section class="hero">
         <span class="icon${a.round ? " round" : ""}" id="heroIcon" style="visibility:hidden">${a.icon}</span>
-        <h1 ${(i = 1, r())}>${a.name}</h1>
-        <p class="tagline" ${r()}>${a.tagline}</p>
-        <div class="meta" ${r()}>
+        <h1 class="reveal" ${(i = 1, r())}>${a.name}</h1>
+        <p class="tagline reveal" ${r()}>${a.tagline}</p>
+        <div class="meta reveal" ${r()}>
           <div class="chips" aria-label="Runs on">${a.platforms.map(p => `<span class="chip">${DEVICE_ICONS[p] || ""}${p}</span>`).join("")}</div>
         </div>
-        <div ${r()}>${store}</div>
+        <div class="reveal" ${r()}>${store}</div>
       </section>
 
-      <section class="section" ${r()}>
+      <section class="section reveal" ${r()}>
         <h2>Features</h2>
         <div class="features">${a.features.map(([t, d]) => `<div class="feature"><h3>${t}</h3><p>${d}</p></div>`).join("")}</div>
       </section>
 
-      <section class="section" ${r()}>
+      <section class="section reveal" ${r()}>
         <h2>Screenshots</h2>
         ${tabs}
         <div class="shots" id="shots"></div>
       </section>
 
-      <section class="section" ${r()} id="${a.id}-privacy">
+      <section class="section reveal" ${r()} id="${a.id}-privacy">
         <h2>Privacy & support</h2>
         <div class="cards">
           <div class="card">
@@ -354,13 +354,13 @@ async function close() {
   const a = apps.find(x => x.id === current);
   document.body.classList.add("closing");
   document.body.classList.remove("open");
+  document.documentElement.style.setProperty("--glow", "#6b7cff");
   tileIcon.style.visibility = "hidden";
   hero.style.visibility = "hidden";
   await fly(hero, tileIcon, a.icon, 480, a.round);
   tileIcon.style.visibility = "";
   detail.hidden = true; detail.innerHTML = "";
   document.body.classList.remove("locked", "closing");
-  document.documentElement.style.setProperty("--glow", "#6b7cff");
   document.title = "Amick Apps";
   current = null; busy = false;
 }

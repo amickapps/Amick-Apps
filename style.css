@@ -1,4 +1,7 @@
+/* Registering --glow lets the background color glide between apps instead of snapping */
+@property --glow { syntax: "<color>"; inherits: true; initial-value: #6b7cff; }
 :root {
+  transition: --glow 700ms var(--ease);
   --bg: #0a0a0d;
   --surface: rgba(255,255,255,.045);
   --surface-2: rgba(255,255,255,.08);
@@ -28,8 +31,6 @@ a { color: inherit; }
   background:
     radial-gradient(40vmax 40vmax at 20% 10%, color-mix(in srgb, var(--glow) 28%, transparent), transparent 70%),
     radial-gradient(35vmax 35vmax at 85% 90%, color-mix(in srgb, var(--glow) 14%, transparent), transparent 70%);
-  transition: background 700ms var(--ease);
-  filter: blur(10px);
 }
 .grain {
   position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .06;
@@ -59,9 +60,9 @@ a { color: inherit; }
 /* Home grid */
 .home {
   max-width: 1040px; margin: 0 auto; padding: 26px 20px 80px;
-  transition: opacity 380ms var(--ease), transform 480ms var(--ease), filter 380ms;
+  transition: opacity 380ms var(--ease), transform 480ms var(--ease);
 }
-body.open .home { opacity: 0; transform: scale(.96); filter: blur(6px); pointer-events: none; }
+body.open .home { opacity: 0; transform: scale(.96); pointer-events: none; }
 .intro h1 {
   font-family: "Space Grotesk", "Inter", sans-serif; font-weight: 600;
   font-size: clamp(30px, 5vw, 46px); line-height: 1.08; letter-spacing: -.03em; margin: 0 0 10px;
@@ -254,6 +255,13 @@ footer a { color: var(--muted); }
 .doc { max-width: 720px; margin: 0 auto; padding: 50px 20px 80px; }
 .doc h1 { font-family: "Space Grotesk", "Inter", sans-serif; font-size: clamp(32px, 6vw, 46px); letter-spacing: -.03em; margin: 0 0 6px; }
 .doc h2 { font-size: 20px; margin: 40px 0 8px; scroll-margin-top: 20px; }
+.doc .app-head {
+  display: flex; align-items: center; gap: 14px;
+  font-family: "Space Grotesk", "Inter", sans-serif; font-size: 28px; letter-spacing: -.02em;
+  margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--line);
+}
+.doc .app-head img { width: 44px; height: 44px; border-radius: 22.5%; box-shadow: 0 6px 18px -6px rgba(0,0,0,.8); }
+.doc .app-head img.round { border-radius: 50%; }
 .doc p { color: #c9c7d2; }
 .doc h3 { font-size: 16px; margin: 26px 0 4px; color: var(--ink); }
 .doc h2 + p { margin-top: 0; }
