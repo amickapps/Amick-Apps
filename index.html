@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amick Apps</title>
+<meta name="description" content="Small, carefully made apps for iPhone, iPad, Mac and Apple Vision Pro by Amick Apps.">
+<meta name="theme-color" content="#0a0a0d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="ambient"></div>
+<div class="grain"></div>
+
+<div class="home" id="home">
+  <header class="top" style="padding:0 0 0;max-width:none">
+    <a class="wordmark" href="./"><i></i>Amick Apps</a>
+    <a class="contact" id="contactTop" href="#">Contact me</a>
+  </header>
+
+  <section class="intro" style="margin-top:9vh">
+    <h1>Small apps,<br>made with care.</h1>
+    <p>Independent apps for iPhone, iPad, Mac and Apple Vision Pro. Tap one to take a closer look.</p>
+  </section>
+
+  <nav class="grid" id="grid" aria-label="Apps"></nav>
+</div>
+
+<footer id="footer">
+  <span>© <span id="year"></span> Amick Apps</span>
+  <span>Apple, iPhone, iPad, Mac and Apple Vision Pro are trademarks of Apple Inc.</span>
+</footer>
+
+<main class="detail" id="detail" hidden aria-live="polite"></main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lb-close" aria-label="Close">✕</button>
+  <button class="lb-nav lb-prev" aria-label="Previous">‹</button>
+  <img alt="">
+  <button class="lb-nav lb-next" aria-label="Next">›</button>
+</div>
+
+<script>
+/* ============================================================
+   EDIT HERE — everything about your apps lives in this list.
+   - icon: swap the inline SVG for '<img src="icons/lunch-bell.png" alt="">' once you have real icons
+   - screenshots: one set per device — shots("iPhone", 1218 / 560, "shots/myapp-iphone", 6)
+     loads shots/myapp-iphone-1.jpg … -6.jpg (the ratio is image height / width)
+   - appStore: paste the App Store link when the app goes live
+   ============================================================ */
+const SUPPORT_EMAIL = "support@amick.app";
+
+// Which apps appear on the site, in order. Add an id back to show it again.
+const SHOW = ["quoin-reader", "clockbar"];
+
+// Builds a device's screenshot set: shots/<prefix>-1.jpg, -2.jpg, …
+const shots = (device, ratio, prefix, count) =>
+  ({ device, ratio, files: Array.from({ length: count }, (_, i) => `${prefix}-${i + 1}.jpg`) });
+
+const allApps = [
+  {
+    id: "lunch-bell", name: "Lunch Bell", color: "#ff7a66",
+    tagline: "Today's school lunch, right on your Home Screen.",
+    status: "Coming soon", platforms: ["iPhone"],
+    features: [
+      ["Find your school", "Pick your district and school once — Lunch Bell remembers it."],
+      ["Lunch at a glance", "A Home Screen widget shows today's menu without opening anything."],
+      ["The week ahead", "Peek at upcoming days so there are no Monday-morning surprises."],
+    ],
+    privacy: "Your district and school are saved on your device. Menus come from LINQ Connect, which sees a standard web request. No accounts, no tracking.",
+    screenshots: [], appStore: "",
+    icon: `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#ff7a66"/><rect x="16" y="20" width="68" height="60" rx="12" fill="#fff3df"/><rect x="22" y="26" width="34" height="48" rx="7" fill="#f6e2c2"/><rect x="60" y="26" width="18" height="22" rx="6" fill="#f6e2c2"/><rect x="60" y="52" width="18" height="22" rx="6" fill="#f6e2c2"/><path d="M26 62 L39 34 L52 62 Z" fill="#e9b26b"/><path d="M28.5 57 L39 39 L49.5 57" fill="none" stroke="#7bbf6a" stroke-width="3.5" stroke-linejoin="round"/><circle cx="69" cy="37" r="7" fill="#e24b3b"/><path d="M69 30 q2 -4 5 -3" stroke="#5a8f3d" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="66" cy="60" r="3.5" fill="#ffb347"/><circle cx="72" cy="66" r="3.5" fill="#ffb347"/></svg>`
+  },
+  {
+    id: "quoin-reader", name: "Quoin Reader", color: "#ee7a33",
+    tagline: "Your RSS feeds, set like a morning newspaper.",
+    status: "Available now", platforms: ["iPhone", "iPhone Duo", "iPad", "Mac"],
+    features: [
+      ["Newspaper layout", "On iPad, every feed gets its own column — favorites get the wide ones."],
+      ["Morning & evening editions", "A masthead that knows what time of day it is, with the weather."],
+      ["The Briefing", "A quick summary card of what's new across your feeds. (Quoin Pro)"],
+      ["Filler filter", "Clickbait and filler get filtered on-device. Nothing leaves your phone."],
+    ],
+    privacy: "No accounts, ads, analytics or tracking. Your feeds, articles and settings stay on your device, and The Briefing and smart filters run on Apple's on-device model.",
+    screenshots: [
+      shots("iPhone", 1218 / 560, "shots/quoin-iphone", 6),
+      shots("iPhone Duo", 1137 / 800, "shots/quoin-duo", 6),
+      shots("iPad", 1050 / 1400, "shots/quoin-ipad", 4),
+    ],
+    appStore: "https://apps.apple.com/us/app/quoin-reader/id6822760577",
+    icon: `<img src="icons/quoin-reader.png" alt="">`
+  },
+  {
+    id: "clockbar", name: "ClockBar", color: "#a9d62f", round: true,
+    tagline: "Time and weather at a glance — a menu-bar-style clock for Apple Vision Pro.",
+    status: "Available now", platforms: ["Apple Vision Pro"],
+    features: [
+      ["Time, date & events", "A compact clock you can place anywhere in your space, with your calendar events for any day."],
+      ["Weather", "Today's conditions, an hourly forecast and a 10-day outlook."],
+      ["Calendar & reminders", "Flip through months and check off today's reminders right from the clock."],
+      ["Live ornaments", "Glanceable weather and battery ornaments, plus multiple color themes."],
+    ],
+    privacy: "ClockBar collects no data. If you've opted in to sharing analytics with developers, Apple may send me anonymized crash reports.",
+    screenshots: [shots("Apple Vision Pro", 788 / 1400, "shots/clockbar", 4)],
+    appStore: "https://apps.apple.com/us/app/clockbar/id6478404834",
+    icon: `<img src="icons/clockbar.png" alt="">`
+  },
+  {
+    id: "doodle-approach", name: "Doodle Approach", color: "#8fb3e8",
+    tagline: "Air traffic control, drawn in the margins of your notebook.",
+    status: "Coming soon", platforms: ["iPhone", "iPhone Duo", "iPad"],
+    features: [
+      ["Draw the route", "Trace a flight path with your finger or Apple Pencil and guide every plane home."],
+      ["The notebook is the world", "Dodge coffee rings, ink blots and a wandering paperclip."],
+      ["Your own planes", "Sketch custom planes to fly. Purely cosmetic — and they stay private."],
+      ["Zen mode", "No crashes to worry about, just a running landing count."],
+    ],
+    privacy: "Your drawings, scores and progress are stored on your device and never uploaded or shared.",
+    screenshots: [], appStore: "",
+    icon: `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#fdfcf7"/><g stroke="#cfe0f2" stroke-width="1"><path d="M0 22H100M0 38H100M0 54H100M0 70H100M0 86H100"/></g><path d="M14 0V100" stroke="#f2b8b8" stroke-width="1.5"/><rect x="58" y="70" width="30" height="9" rx="2" fill="none" stroke="#555" stroke-width="2"/><path d="M62 74.5h4M70 74.5h4M78 74.5h4" stroke="#555" stroke-width="1.5"/><path d="M28 30 C40 38, 46 58, 60 68" fill="none" stroke="#777" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/><g transform="translate(24 26) rotate(40)"><path d="M0 -10 L2.5 -2 L12 2 L12 5 L2.5 3 L1.5 10 L5 13 L5 15 L0 13.5 L-5 15 L-5 13 L-1.5 10 L-2.5 3 L-12 5 L-12 2 L-2.5 -2 Z" fill="#e8eef9" stroke="#3b3b3b" stroke-width="1.6" stroke-linejoin="round"/></g><g transform="translate(66 60) rotate(-35)"><rect x="-3.5" y="-22" width="7" height="22" fill="#ffc94d" stroke="#3b3b3b" stroke-width="1.4"/><path d="M-3.5 0 L0 8 L3.5 0 Z" fill="#f2d3a8" stroke="#3b3b3b" stroke-width="1.4" stroke-linejoin="round"/><path d="M-1.2 5.3 L0 8 L1.2 5.3Z" fill="#3b3b3b"/><rect x="-3.5" y="-27" width="7" height="5" fill="#f28b9a" stroke="#3b3b3b" stroke-width="1.4"/></g></svg>`
+  },
+  {
+    id: "robodraft", name: "Robodraft", color: "#4f8df0",
+    tagline: "Rough out a robot cell in minutes, not days.",
+    status: "Coming soon", platforms: ["iPhone", "iPad"],
+    features: [
+      ["Robot suggestions", "Enter part size, part weight and tool weight to get a FANUC-style robot that fits."],
+      ["Pick & place in 3D", "Drop points in space, including tilted picks with full 6-axis motion."],
+      ["Reach & cycle time", "See whether it reaches, watch it run, and get a cycle-time estimate."],
+      ["ROBOGUIDE export", "Generate a TP (.LS) program to carry into ROBOGUIDE."],
+    ],
+    privacy: "Projects, cell layouts and exported programs are stored on your device. Nothing is uploaded.",
+    screenshots: [], appStore: "",
+    icon: `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#123d7a"/><g stroke="#ffffff" stroke-opacity=".1" stroke-width="1"><path d="M0 12.5H100M0 25H100M0 37.5H100M0 50H100M0 62.5H100M0 75H100M0 87.5H100M12.5 0V100M25 0V100M37.5 0V100M50 0V100M62.5 0V100M75 0V100M87.5 0V100"/></g><g fill="none" stroke="#e8f1ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 82H56"/><path d="M30 82V74H50V82"/><path d="M40 74 L34 46 L66 30"/><path d="M66 30 L76 40"/><path d="M71 45 L76 40 L81 45"/></g><g fill="#123d7a" stroke="#e8f1ff" stroke-width="3"><circle cx="40" cy="74" r="5"/><circle cx="34" cy="46" r="5"/><circle cx="66" cy="30" r="4.5"/></g><path d="M14 18 H30" stroke="#7fb2ff" stroke-width="1.5" stroke-dasharray="2 2"/></svg>`
+  },
+  {
+    id: "knitting", name: "Knitting app", color: "#f3a6bd",
+    tagline: "Your patterns, one row at a time.",
+    status: "In development", platforms: ["iPhone", "iPad"],
+    features: [
+      ["Pattern library", "Import pattern PDFs and the details are pulled out for you."],
+      ["Knitting mode", "Step through instructions one at a time — it works in landscape, too."],
+      ["Chart row tracker", "Colorwork charts shown row by row, color by color. Mark a row done and keep going."],
+      ["Ravelry & iCloud", "Connect Ravelry, and your PDFs and progress sync through iCloud."],
+    ],
+    privacy: "Patterns and progress are stored on your device and in your own iCloud. If you connect Ravelry, the app talks to Ravelry for you.",
+    screenshots: [], appStore: "",
+    icon: `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#f6dfe4"/><path d="M8 84 C30 70, 60 96, 92 80" stroke="#e98fa8" stroke-width="3" fill="none" stroke-linecap="round"/><g fill="#fffaf2"><circle cx="38" cy="48" r="13"/><circle cx="52" cy="42" r="14"/><circle cx="64" cy="50" r="12"/><circle cx="46" cy="60" r="13"/><circle cx="60" cy="62" r="12"/><circle cx="34" cy="60" r="10"/></g><rect x="38" y="68" width="5" height="12" rx="2.5" fill="#3a2430"/><rect x="56" y="68" width="5" height="12" rx="2.5" fill="#3a2430"/><ellipse cx="72" cy="46" rx="10" ry="12" fill="#3a2430"/><ellipse cx="66" cy="38" rx="5" ry="3" fill="#3a2430" transform="rotate(-30 66 38)"/><circle cx="75" cy="44" r="2" fill="#fffaf2"/><circle cx="69" cy="44" r="2" fill="#fffaf2"/><ellipse cx="72" cy="52" rx="3" ry="1.6" fill="#f3a6bd"/></svg>`
+  },
+  {
+    id: "roast-logger", name: "Roast logger", color: "#e08a3c",
+    tagline: "Watch your Aillio Bullet roast curve, live.",
+    status: "In development", platforms: ["iPad", "iPhone"],
+    features: [
+      ["Live curves", "Bean temperature and rate of rise, graphed as the roast happens."],
+      ["Roast log", "Every roast saved with its curve so you can compare batches."],
+      ["Raspberry Pi bridge", "A small Pi connects to the roaster over USB and streams to the app over Wi-Fi."],
+      ["Read-only by design", "It watches and records — it never controls the roaster."],
+    ],
+    privacy: "Roast data travels over your local Wi-Fi from your Raspberry Pi to the app and is stored on your device. Nothing is sent to me.",
+    screenshots: [], appStore: "",
+    icon: `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#2a1d16"/><g stroke="#f4e6d6" stroke-opacity=".1"><path d="M14 30H86M14 50H86M14 70H86"/></g><path d="M14 82 C26 82, 30 58, 46 52 S70 40, 86 24" fill="none" stroke="#e08a3c" stroke-width="4" stroke-linecap="round"/><path d="M14 66 C30 40, 50 46, 86 56" fill="none" stroke="#7bc6b8" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1 5"/><circle cx="86" cy="24" r="5" fill="#e08a3c"/><g transform="translate(30 30) rotate(-30)"><ellipse rx="10" ry="13" fill="#6b3f26"/><path d="M0 -12 C-4 -4, 4 4, 0 12" stroke="#2a1d16" stroke-width="2" fill="none"/></g></svg>`
+  },
+];
+
+/* ============================================================ */
+const apps = SHOW.map(id => allApps.find(a => a.id === id)).filter(Boolean);
+
+const $ = (s, el = document) => el.querySelector(s);
+const grid = $("#grid"), detail = $("#detail");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const mail = (subject) => `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+$("#year").textContent = new Date().getFullYear();
+$("#contactTop").href = mail("Hello from amick.app");
+
+grid.innerHTML = apps.map(a => `
+  <button class="tile" data-id="${a.id}" style="--c:${a.color}" aria-label="${a.name}">
+    <span class="icon${a.round ? " round" : ""}">${a.icon}</span>
+    <span class="name">${a.name}</span>
+    <span class="status">${a.status}</span>
+  </button>`).join("");
+
+// Small line icons shown beside each platform name
+const DEVICE_ICONS = (() => {
+  const svg = (d) => `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  return {
+    "iPhone": svg('<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 5h3"/>'),
+    "iPhone Duo": svg('<rect x="2.5" y="4" width="9" height="16" rx="2"/><rect x="12.5" y="4" width="9" height="16" rx="2"/>'),
+    "iPad": svg('<rect x="3.5" y="3" width="17" height="18" rx="2.5"/><path d="M11 18h2"/>'),
+    "Mac": svg('<rect x="4" y="4.5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/>'),
+    "Apple Vision Pro": svg('<path d="M3 10.5c0-2.5 2-4 4.5-4h9c2.5 0 4.5 1.5 4.5 4v1.5c0 2.8-1.8 4.5-4 4.5-1.6 0-2.6-.8-3.3-1.9-.4-.6-1-.9-1.7-.9s-1.3.3-1.7.9c-.7 1.1-1.7 1.9-3.3 1.9-2.2 0-4-1.7-4-4.5z"/>'),
+  };
+})();
+
+function renderDetail(a) {
+  let i = 0; const r = () => `class="reveal" style="--i:${i++}"`;
+  const sets = a.screenshots;
+  const tabs = sets.length > 1
+    ? `<div class="seg" role="tablist"><span class="seg-pill"></span>${sets.map((set, k) =>
+        `<button role="tab" data-k="${k}" aria-selected="${k === 0}">${set.device}</button>`).join("")}</div>`
+    : sets.length === 1 ? `<p class="device-note">${sets[0].device}</p>` : "";
+  const store = a.appStore
+    ? `<a class="store" href="${a.appStore}"><img src="badges/app-store.svg" alt="Download on the App Store" onerror="this.parentNode.className='button';this.replaceWith('View on the App Store  →')"></a>`
+    : `<span class="soon"><b></b>${a.status === "Coming soon" ? "Coming soon to the App Store" : "In development"}</span>`;
+  detail.innerHTML = `
+    <div class="detail-inner">
+      <button class="back reveal" style="--i:0" id="back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3 5 8l5 5"/></svg>All apps
+      </button>
+      <section class="hero">
+        <span class="icon${a.round ? " round" : ""}" id="heroIcon" style="visibility:hidden">${a.icon}</span>
+        <h1 ${(i = 1, r())}>${a.name}</h1>
+        <p class="tagline" ${r()}>${a.tagline}</p>
+        <div class="meta" ${r()}>
+          <div class="chips" aria-label="Runs on">${a.platforms.map(p => `<span class="chip">${DEVICE_ICONS[p] || ""}${p}</span>`).join("")}</div>
+        </div>
+        <div ${r()}>${store}</div>
+      </section>
+
+      <section class="section" ${r()}>
+        <h2>Features</h2>
+        <div class="features">${a.features.map(([t, d]) => `<div class="feature"><h3>${t}</h3><p>${d}</p></div>`).join("")}</div>
+      </section>
+
+      <section class="section" ${r()}>
+        <h2>Screenshots</h2>
+        ${tabs}
+        <div class="shots" id="shots"></div>
+      </section>
+
+      <section class="section" ${r()} id="${a.id}-privacy">
+        <h2>Privacy & support</h2>
+        <div class="cards">
+          <div class="card">
+            <h3>Privacy</h3>
+            <p>${a.privacy}</p>
+            <a class="link" href="privacy.html#${a.id}">Full privacy policy</a>
+          </div>
+          <div class="card">
+            <h3>Need help?</h3>
+            <p>Found a bug or have an idea? I read every message and usually reply within a couple of days.</p>
+            <a class="button" href="${mail(a.name + " support")}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 7 9 6 9-6"/></svg>Contact me
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>`;
+  $("#back").onclick = () => { location.hash = ""; };
+
+  const strip = $("#shots");
+  const showSet = (k) => {
+    const set = sets[k];
+    strip.innerHTML = set
+      ? set.files.map((f, n) => `<figure class="shot" style="--r:${set.ratio}"><img src="${f}" alt="${a.name} on ${set.device}, screenshot ${n + 1}" loading="lazy" decoding="async"></figure>`).join("")
+      : [1, 2, 3].map(() => `<figure class="shot ph"><span>Screenshot coming soon</span></figure>`).join("");
+    strip.scrollLeft = 0;
+  };
+  showSet(0);
+  strip.addEventListener("click", (e) => {
+    const fig = e.target.closest(".shot:not(.ph)");
+    if (fig) openLightbox([...strip.querySelectorAll(".shot img")], [...strip.children].indexOf(fig));
+  });
+
+  const seg = $(".seg", detail);
+  if (seg) {
+    const pill = $(".seg-pill", seg);
+    const move = (btn) => { pill.style.left = btn.offsetLeft + "px"; pill.style.width = btn.offsetWidth + "px"; };
+    requestAnimationFrame(() => move($('[aria-selected="true"]', seg)));
+    seg.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn || btn.getAttribute("aria-selected") === "true") return;
+      seg.querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", b === btn));
+      move(btn);
+      strip.classList.add("swap");
+      setTimeout(() => { showSet(+btn.dataset.k); strip.classList.remove("swap"); }, reduce ? 0 : 180);
+    });
+  }
+}
+
+// Fly an icon from one element's position to another's (FLIP)
+function fly(from, to, html, duration = 560, round = false) {
+  const a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+  if (reduce || !a.width || !b.width) return Promise.resolve();
+  const c = document.createElement("div");
+  c.className = "flyer";
+  c.innerHTML = `<span class="icon${round ? " round" : ""}">${html}</span>`;
+  Object.assign(c.style, { left: b.left + "px", top: b.top + "px", width: b.width + "px" });
+  document.body.append(c);
+  const s = a.width / b.width;
+  return c.animate([
+    { transform: `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${s})` },
+    { transform: "translate(0,0) scale(1.06)", offset: .82 },
+    { transform: "none" }
+  ], { duration, easing: "cubic-bezier(.2,.8,.2,1)" }).finished.then(() => c.remove());
+}
+
+// Tap a screenshot to view it full size
+const lb = $("#lightbox"), lbImg = $("img", lb);
+let lbList = [], lbIdx = 0;
+function lbShow(n) {
+  lbIdx = (n + lbList.length) % lbList.length;
+  lbImg.src = lbList[lbIdx].src; lbImg.alt = lbList[lbIdx].alt;
+  lb.classList.toggle("single", lbList.length < 2);
+}
+function openLightbox(imgs, n) {
+  lbList = imgs; lbShow(n); lb.hidden = false;
+  requestAnimationFrame(() => lb.classList.add("on"));
+}
+function closeLightbox() {
+  lb.classList.remove("on");
+  setTimeout(() => { lb.hidden = true; }, reduce ? 0 : 250);
+}
+lb.addEventListener("click", (e) => {
+  if (e.target.closest(".lb-prev")) lbShow(lbIdx - 1);
+  else if (e.target.closest(".lb-next")) lbShow(lbIdx + 1);
+  else if (e.target !== lbImg) closeLightbox();
+});
+let touchX = null;
+lb.addEventListener("touchstart", (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+lb.addEventListener("touchend", (e) => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX; touchX = null;
+  if (Math.abs(dx) > 40) lbShow(lbIdx + (dx < 0 ? 1 : -1));
+});
+
+let current = null, busy = false;
+
+async function open(id, animate = true) {
+  const a = apps.find(x => x.id === id);
+  if (!a || busy || current === id) return;
+  busy = true; current = id;
+  const tileIcon = $(`.tile[data-id="${id}"] .icon`);
+  document.documentElement.style.setProperty("--glow", a.color);
+  document.title = `${a.name} — Amick Apps`;
+  renderDetail(a);
+  detail.hidden = false; detail.scrollTop = 0;
+  document.body.classList.add("locked");
+  tileIcon.style.visibility = "hidden";
+  requestAnimationFrame(() => document.body.classList.add("open"));
+  if (animate) await fly(tileIcon, $("#heroIcon"), a.icon, 560, a.round);
+  $("#heroIcon").style.visibility = "visible";
+  tileIcon.style.visibility = "";
+  busy = false;
+}
+
+async function close() {
+  if (!current || busy) return;
+  busy = true;
+  const tileIcon = $(`.tile[data-id="${current}"] .icon`), hero = $("#heroIcon");
+  const a = apps.find(x => x.id === current);
+  document.body.classList.add("closing");
+  document.body.classList.remove("open");
+  tileIcon.style.visibility = "hidden";
+  hero.style.visibility = "hidden";
+  await fly(hero, tileIcon, a.icon, 480, a.round);
+  tileIcon.style.visibility = "";
+  detail.hidden = true; detail.innerHTML = "";
+  document.body.classList.remove("locked", "closing");
+  document.documentElement.style.setProperty("--glow", "#6b7cff");
+  document.title = "Amick Apps";
+  current = null; busy = false;
+}
+
+grid.addEventListener("click", e => {
+  const t = e.target.closest(".tile");
+  if (t) location.hash = t.dataset.id;
+});
+addEventListener("hashchange", () => {
+  const id = location.hash.slice(1).replace(/-privacy$/, "");
+  id && apps.some(a => a.id === id) ? open(id) : close();
+});
+addEventListener("keydown", e => {
+  if (!lb.hidden) {
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") lbShow(lbIdx + 1);
+    if (e.key === "ArrowLeft") lbShow(lbIdx - 1);
+    return;
+  }
+  if (e.key === "Escape" && current) location.hash = "";
+});
+
+// Deep links like amick.app/#robodraft open straight to that app
+const start = location.hash.slice(1);
+const startId = start.replace(/-privacy$/, "");
+if (apps.some(a => a.id === startId)) {
+  open(startId, false).then(() => start.endsWith("-privacy") && document.getElementById(start)?.scrollIntoView());
+}
+</script>
+</body>
+</html>
