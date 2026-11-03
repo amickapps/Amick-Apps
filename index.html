@@ -55,7 +55,7 @@
 const SUPPORT_EMAIL = "support@amick.app";
 
 // Which apps appear on the site, in order. Add an id back to show it again.
-const SHOW = ["quoin-reader", "clockbar"];
+const SHOW = ["quoin-reader", "robodraft", "clockbar"];
 
 // Builds a device's screenshot set: shots/<prefix>-1.jpg, -2.jpg, …
 const shots = (device, ratio, prefix, count) =>
@@ -125,15 +125,15 @@ const allApps = [
   },
   {
     id: "robodraft", name: "Robodraft", color: "#4f8df0",
-    tagline: "Rough out a robot cell in minutes, not days.",
+    tagline: "Estimate a cycle time in minutes, not hours.",
     status: "Coming soon", platforms: ["iPhone", "iPad"],
     features: [
-      ["Robot suggestions", "Enter part size, part weight and tool weight to get a FANUC-style robot that fits."],
+      ["Robot suggestions", "Enter part size, part weight and tool weight to get a robot that fits."],
       ["Pick & place in 3D", "Drop points in space, including tilted picks with full 6-axis motion."],
       ["Reach & cycle time", "See whether it reaches, watch it run, and get a cycle-time estimate."],
       ["ROBOGUIDE export", "Generate a TP (.LS) program to carry into ROBOGUIDE."],
     ],
-    privacy: "Projects, cell layouts and exported programs are stored on your device. Nothing is uploaded.",
+    privacy: "Projects, cell layouts and exported programs are stored on your device.",
     screenshots: [], appStore: "",
     icon: `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#123d7a"/><g stroke="#ffffff" stroke-opacity=".1" stroke-width="1"><path d="M0 12.5H100M0 25H100M0 37.5H100M0 50H100M0 62.5H100M0 75H100M0 87.5H100M12.5 0V100M25 0V100M37.5 0V100M50 0V100M62.5 0V100M75 0V100M87.5 0V100"/></g><g fill="none" stroke="#e8f1ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 82H56"/><path d="M30 82V74H50V82"/><path d="M40 74 L34 46 L66 30"/><path d="M66 30 L76 40"/><path d="M71 45 L76 40 L81 45"/></g><g fill="#123d7a" stroke="#e8f1ff" stroke-width="3"><circle cx="40" cy="74" r="5"/><circle cx="34" cy="46" r="5"/><circle cx="66" cy="30" r="4.5"/></g><path d="M14 18 H30" stroke="#7fb2ff" stroke-width="1.5" stroke-dasharray="2 2"/></svg>`
   },
