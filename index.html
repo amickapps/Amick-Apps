@@ -55,13 +55,32 @@
 const SUPPORT_EMAIL = "support@amick.app";
 
 // Which apps appear on the site, in order. Add an id back to show it again.
-const SHOW = ["quoin-reader", "robodraft", "clockbar"];
+const SHOW = ["wren-workbook", "quoin-reader", "robodraft", "clockbar"];
 
 // Builds a device's screenshot set: shots/<prefix>-1.jpg, -2.jpg, …
 const shots = (device, ratio, prefix, count) =>
   ({ device, ratio, files: Array.from({ length: count }, (_, i) => `${prefix}-${i + 1}.jpg`) });
 
 const allApps = [
+  {
+    id: "wren-workbook", name: "Wren Workbook", color: "#3f7cf5",
+    tagline: "Notes and to-dos, one project at a time.",
+    status: "Coming soon", platforms: ["iPhone", "iPhone Duo", "iPad"],
+    features: [
+      ["Notes that make to-dos", "Start a line with [ ] in any note and it becomes a to-do in that project's list, linked back to the note."],
+      ["A clear Today", "What's due from every project in one list, late items first, with Upcoming for the weeks ahead."],
+      ["Sketch with Apple Pencil", "Draw boxes beside your handwriting and Find To-Dos turns them into to-dos, read on your device."],
+      ["Sync your way", "iCloud with no setup, your own free server for a web app and a Claude connector, or just this device."],
+    ],
+    privacy: "No accounts, ads, analytics or tracking. Your notes and to-dos stay on your device and go only where you choose: your own iCloud, your own server, or nowhere. I never see them.",
+    screenshots: [
+      shots("iPhone", 1216 / 560, "shots/wren-iphone", 6),
+      shots("iPhone Duo", 985 / 1400, "shots/wren-duo", 4),
+      shots("iPad", 1050 / 1400, "shots/wren-ipad", 4),
+    ],
+    appStore: "",
+    icon: `<img src="icons/wren-workbook.png" alt="">`
+  },
   {
     id: "lunch-bell", name: "Lunch Bell", color: "#ff7a66",
     tagline: "Today's school lunch, right on your Home Screen.",
